@@ -12,23 +12,22 @@ import subprocess
 import winsound
 import time
 
-def NetFail():
-    winsound.Beep(2000 , 180), winsound.Beep(1400 , 180)
+class Sound():
+    def NetFail():
+        winsound.Beep(2000 , 180), winsound.Beep(1400 , 180)
+    def NetSucc():
+        winsound.Beep(1400 , 250), winsound.Beep(2000 , 250), winsound.Beep(3600 , 280)
 
-def NetSucc():
-    winsound.Beep(1400 , 250), winsound.Beep(2000 , 250), winsound.Beep(3600 , 280)
 
-ips = []
-n = 1
-NetSuccess, NetFailure, PinSuc, PinFail = 10, 10, 0, 0
+ips = [] # I think this code is used to create a variable of an IP address?
 x = '8.8.8.8'
-
 ips.append(x)
-for ping in range(0,n):
-    ipd=ips[ping]
+for ping in range(0,1):
+    ipd = ips[ping]
+
 
 class IP(object):
-    UNABLE = "failed"   # word indicating unreachable host
+    UNABLE = "failed"   # word indicating unreachable host #CHANGE MADE FROM UNABLE TO CODE
     MAX = 15            # number of success/failure to record new state
     def __init__(self, ip, failfunc, succfunc, initial = True):
         self.ip = ip
@@ -37,10 +36,10 @@ class IP(object):
         self.connected = initial  # start by default in connected state
         self.curr = 0             # number of successive alternate states
     def test(self):
-        p = subprocess.Popen([ 'ping', '-n', '1', ipd], #ipd use to be IP but it didn't accept 8.8.8.8
+        p = subprocess.Popen([ 'ping', '-n', '1', self],
                      stdout = subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.communicate()
-        if self.UNABLE in out:
+        if self.UNABLE in out: # CHANGE MADE FROM UNABLE TO CODE
             if self.connected:
                 self.curr += 1
             else:
@@ -59,18 +58,23 @@ class IP(object):
                 self.failfunc(self)
 
 
+# MAIN PROGRAM
 
 IP.test(ipd)
 
 
+# NOTES
+
+# I have a basic understanding of CLASS and I am still trying to wrap my head around __int__ and self declarations. In the context
+# of this application I am unable to figure out why the code is throwing an error about a STR not being an attibute. 
+# I have made a small CLASS at the top to practice turning the two sound functions I had into a CLASS. It doesn't seem I need to 
+# but it's about learning it more so than practibility at the moment. 
 
 
+# TEST & OLD CODE BELOW
 
-
-
-
-
-
+# Sound.NetFail()
+# Sound.NetSucc()
 
 #def PingFailure():
 #    while PinFail < NetSuccess:
