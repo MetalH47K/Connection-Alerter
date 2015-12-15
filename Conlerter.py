@@ -37,7 +37,7 @@ class IP(object):
         self.connected = initial  # start by default in connected state
         self.curr = 0             # number of successive alternate states
     def test(self):
-        p = subprocess.Popen([ 'ping', '-n', '1', ipd],
+        p = subprocess.Popen([ 'ping', '-n', '1', ipd], #ipd use to be IP but it didn't accept 8.8.8.8
                      stdout = subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.communicate()
         if self.UNABLE in out:
