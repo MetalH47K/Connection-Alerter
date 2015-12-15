@@ -18,36 +18,79 @@ def NetFail():
 def NetSucc():
     winsound.Beep(1400 , 250), winsound.Beep(2000 , 250), winsound.Beep(3600 , 280)
 
-ips=[]
+ips = []
 n = 1
-NetSuccess = 10
-NetFailure = 10
-PinSuc = 0
-PinFail = 0
+NetSuccess, NetFailure, PinSuc, PinFail = 10, 10, 0, 0
 x = '8.8.8.8'
+
 ips.append(x)
 for ping in range(0,n):
     ipd=ips[ping]
 
-def PingFailure():
-    while PinFail < NetSuccess:
-        res = subprocess.call(['ping', '-n', '10', ipd])
-    if ipd in str(res):
-        PingSuccess()
-    else:
-        print ("ping to", ipd, "failed!"), NetFail()
+class IP(object):
+    UNABLE = "failed"   # word indicating unreachable host
+    MAX = 15            # number of success/failure to record new state
+    def __init__(self, ip, failfunc, succfunc, initial = True):
+        self.ip = ip
+        self.failfunc = failfunc  # to warn of a disconnection
+        self.succfunc = succfunc  # to warn of a connection
+        self.connected = initial  # start by default in connected state
+        self.curr = 0             # number of successive alternate states
+    def test(self):
+        p = subprocess.Popen([ 'ping', '-n', '1', ipd],
+                     stdout = subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        if self.UNABLE in out:
+            if self.connected:
+                self.curr += 1
+            else:
+                self.curr = 0   # reset count
+        else:
+            if not self.connected:
+                self.curr += 1
+            else:
+                self.curr = 0   # reset count
+        if self.curr >= self.MAX:     # state has changed
+            self.connected = not self.connected
+            self.curr = 0
+            if self.connected:        # warn for new state
+                self.succfunc(self)
+            else:
+                self.failfunc(self)
 
-def PingSuccess():
-    while PinFail < NetFailure: # This needs to be cleaned up so it doesn't interfere with the other function
-        res = subprocess.call(['ping', '-n', '10', ipd])
-    if ipd in str(res):
-        PingFail()
-    else:
-        print ("ping to", ipd, "successful!"), NetSucc()
 
-# I've defined the main looping fuctions. 
 
-print('Starting Monitor'); PingSuccess()
+IP.test(ipd)
+
+
+
+
+
+
+
+
+
+
+
+#def PingFailure():
+#    while PinFail < NetSuccess:
+#        res = subprocess.call(['ping', '-n', '10', ipd])
+#    if ipd in str(res):
+#        PingSuccess()
+#    else:
+#        print ("ping to", ipd, "failed!"), NetFail()
+
+#def PingSuccess():
+#    while PinFail < NetFailure: # This needs to be cleaned up so it doesn't interfere with the other function
+#        res = subprocess.call(['ping', '-n', '10', ipd])
+#    if ipd in str(res):
+#        PingFail()
+#    else:
+#        print ("ping to", ipd, "successful!"), NetSucc()
+
+## I've defined the main looping fuctions. 
+
+#print('Starting Monitor'); PingSuccess()
 
 # So it runs the main loop until the connection fails: It plays a sound and runs the second loop until the connection is
 # restablished, plays a sound and it switches back to the other loop. I only want it to play the sound when switching 
