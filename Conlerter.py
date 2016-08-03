@@ -7,60 +7,7 @@
 #    This is free software, and you are welcome to redistribute it
 #    under certain conditions; type `show c' for details.
 
-import os
-import subprocess
-import winsound
-import time
 
-class Sound():
-    def NetFail():
-        winsound.Beep(2000 , 180), winsound.Beep(1400 , 180)
-    def NetSucc():
-        winsound.Beep(1400 , 250), winsound.Beep(2000 , 250), winsound.Beep(3600 , 280)
-
-
-ips = [] # I think this code is used to create a variable of an IP address?
-x = '8.8.8.8'
-ips.append(x)
-for ping in range(0,1):
-    ipd = ips[ping]
-
-
-class IP(object):
-    UNABLE = "failed"   # word indicating unreachable host #CHANGE MADE FROM UNABLE TO CODE
-    MAX = 15            # number of success/failure to record new state
-    def __init__(self, ip, failfunc, succfunc, initial = True):
-        self.ip = ip
-        self.failfunc = failfunc  # to warn of a disconnection
-        self.succfunc = succfunc  # to warn of a connection
-        self.connected = initial  # start by default in connected state
-        self.curr = 0             # number of successive alternate states
-    def test(self):
-        p = subprocess.Popen([ 'ping', '-n', '1', self],
-                     stdout = subprocess.PIPE, stderr=subprocess.PIPE)
-        out, err = p.communicate()
-        if self.UNABLE in out: # CHANGE MADE FROM UNABLE TO CODE
-            if self.connected:
-                self.curr += 1
-            else:
-                self.curr = 0   # reset count
-        else:
-            if not self.connected:
-                self.curr += 1
-            else:
-                self.curr = 0   # reset count
-        if self.curr >= self.MAX:     # state has changed
-            self.connected = not self.connected
-            self.curr = 0
-            if self.connected:        # warn for new state
-                self.succfunc(self)
-            else:
-                self.failfunc(self)
-
-
-# MAIN PROGRAM
-
-IP.test(ipd)
 
 
 # NOTES
