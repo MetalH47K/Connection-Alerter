@@ -22,39 +22,50 @@ class ConSound():
 IPAddress = "8.8.8.8"
 
 class IP(object):
-    StateChangeRate = 15
     def __init__(self, ip, failfunc, succfunc, initial = True):
         self.ip = ip
         self.failfunc = ConSound.NetFail()
         self.succfunc = ConSound.NetSucc()
         self.connected = initial
-        self.curr = 0
+        switch = 0
     def PingTest(self):
+        FailPing = 0
+        StateChangeRate = 5
         FailedPing = "Request timed out"
-        p = subprocess.Popen(['ping', '-n', '1', self],
-            stdout = subprocess.PIPE, stderr=subprocess.PIPE)
-        out,err = p.communicate()
-        if FailedPing.encode('utf-8') in out:
-            if self.connected:
-                self.curr += 1
-                print(curr)  ### TESTING
+        ElseTestPing = 0 #####
+        SuccessfulPing = 0
+        loop = 0
+        Switch = 0
+        while loop < 1:
+            p = subprocess.Popen(['ping', '-n', '1', self], #CMD eqiv: C:\>ping -n 1 IPAddress 
+                stdout = subprocess.PIPE, stderr=subprocess.PIPE)
+            out,err = p.communicate()
+            if FailedPing.encode('utf-8') in out:
+                if FailPing >= StateChangeRate:
+                    ConSound.NetFail()
+                    FailPing += 1
+                    Switch = 1
+                    print('STATE CHANGE')
+                else:
+                    ElseTestPing += 1     
+                    print('Ping Null Land', ElseTestPing) #Seems to be redirecting here even on a successful ping which means there is an error with the IF statment
             else:
-                self.curr = 0
-        else:
-            if not self.connected: ### Errors out Here
-                self.curr += 1
+                print('Ping Successful REDIRECTED FROM FIRST IF STATEMENT')
+            if Switch == 1:
+                if SuccessfulPing >= StateChangeRate:
+                    ConSound.NetSucc()
+                    SuccessfulPing += 1
+                    Switch = 0
+                    print('STATE CHANGE')
+                else:
+                    ElseTestPing += 1     
+                    print('Ping Null Land', ElseTestPing) 
             else:
-                self.curr = 0
-        if self.curr >= self.StateChangeRate:
-            self.connected = not self.connected
-            self.curr = 0
-            if self.connected:
-                self.succfunc(self)
-            else:
-                self.failfunc(self)
+                print('Pinging Again:')
+                print(' ')
 
 
-
+IP.PingTest(IPAddress)
 
 		
 
@@ -66,12 +77,12 @@ class IP(object):
 		
 # MAIN PROGRAM
 
-IP.PingTest(IPAddress)
+#Junk
 
-UnableToFindHost = "Ping request could not find host"
-UnreachablePing = "Destination Host Unreachable"
-PingR = PingReply
-PingF = FailedPing
-PingH = UnableToFindHost
-PingU = UnreachablePing
-SCN = StateChangeNumber            # number of success/failure pings to record new state
+#UnableToFindHost = "Ping request could not find host"
+#UnreachablePing = "Destination Host Unreachable"
+#PingR = PingReply
+#PingF = FailedPing
+#PingH = UnableToFindHost
+#PingU = UnreachablePing
+#SCN = StateChangeNumber            # number of success/failure pings to record new state
