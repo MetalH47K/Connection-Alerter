@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Connection-Alerter1", "Connection-Alerter1.pyproj", "{097D7BC8-E24C-4F75-B28C-1D491D4DF28B}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Connection-Alerter", "Connection-Alerter.pyproj", "{47EC2F3B-1906-4E62-AC56-6C990F834E11}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +13,6 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{097D7BC8-E24C-4F75-B28C-1D491D4DF28B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{097D7BC8-E24C-4F75-B28C-1D491D4DF28B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{47EC2F3B-1906-4E62-AC56-6C990F834E11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{47EC2F3B-1906-4E62-AC56-6C990F834E11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

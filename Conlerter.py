@@ -8,10 +8,8 @@
 #    under certain conditions; type `show c' for details.
 
 
-import os
 import subprocess
 import winsound
-import time
 
 class ConSound():
     def NetFail():
